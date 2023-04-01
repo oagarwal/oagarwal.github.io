@@ -1,0 +1,86 @@
+<html>
+
+<head>
+	<title>NER instructions</title>
+</head>
+
+<body>
+	<h3>Named Entity Recognition </h3>
+	Named Entity Recognition involves marking named entities and their type (person, location and organization) in text. Entities need to be named. eg. "The professor" is not a named person but "John E. Smith" is a named person. <br/><br/>
+	
+	There are three types of entities we will be marking -<br/>
+	
+	<ol>
+		<li>Person - Names of people, real or fictional as well as animals including aliases. eg. John, Linda, Smith, Kristen Bell</li><br/>
+	
+		<li>Location - Any named locations, not just cities and countries. eg. Philadelphia, Earth, India, 34th Street, Mike's Cafe, downtown Chicago</li><br/>
+
+		<li>Organization - Any named group of people, not just corporations. eg. Knicks, Metropolitan Museum of Art, FBI, Microsoft, Carlton Group, Vogue, Vogue magazine</li><br/>
+	</ol>
+	
+	<h3>Marking Scheme</h3>
+	The following codes are used for each type of entity-<br/>
+	
+	<ol>
+		<li>Person - PER</li>
+		<li>Location - LOC</li>
+		<li>Organization - ORG</li>
+		<li>Everything else - O</li>
+	</ol><br/>
+	
+	PER, LOC, ORG are preceeded by 'I' or 'B'. 'I' stands for a word inside the entity and 'B' stands for a word at the beginnning of the entity. However, 'B' is used only when an entity is immediately follows another entity of the same type. Following are some examples -<br/>
+	
+	<ol>
+		<li>"Africa South Africa" would be marked as "I-LOC B-LOC I-LOC" to identify that "South Africa" is not the same entity as "Africa"</li><br/>
+		<li>"South Africa Africa" would be marked as "I-LOC I-LOC I-LOC" as "South Africa" is a part of "Africa" and the whole phrase together forms one entity</li><br/>
+		<li>"John Smith New York City" would be "I-PER I-PER I-LOC I-LOC I-LOC". We need not use B-LOC for "New" as it is preceeded by an entity of different type.</li><br/>
+		<li>"San Fransisco , California" would be I-LOC for everything including the comma as the whole phrase is an entity.</li><br/>
+		<li>"San Francisco , Seattle" would be "I-LOC I-LOC O I-LOC". Here comma is 'O' and not a part of the entity as these are two separate cities.</li><br/>
+	</ol>
+	
+	<h3>Document Format</h3>
+	Each file consists of multiple news articles. Each line containing the word 'DOCSTART' indicates the start of a new article. This line also mentions the genre of the article such as Sports, Arts etc. In some cases, the genre may be useful to determine the type of entity.<br/><br/>
+	
+	Each article consists of a few sentences. These are in order but are missing sentences as they have been sampled. An empty line denotes the end of the current sentence. Take the whole document into consideration when deciding the type of each word.<br/><br/>
+	
+	Each line in the file is of the format "WORD TYPE". eg. John I-PER
+	
+	<h3>Task</h3>
+	All articles have been automatically marked up with types but they contain errors. The task is to correct these errors. If there is an error, add a space followed by the correct type to that line. If you think there is an error but you are not sure, write 'ERROR' as the type. So in case of errors, the line in the file will look like 'WORD TYPE CORRECT_TYPE' if sure or 'WORD TYPE ERROR' if unsure.<br/><br/>
+	
+	Open the file in 'Notepad++' or equivalent. You can install it from this <a href="https://notepad-plus-plus.org/downloads/v7.8.4/">link</a>. Download the installer.<br/><br/>
+	
+	Do NOT use Notepad. It isn't able to handle even moderadately large files and the formatting can be messy.<br/><br/>
+	
+	<strong>Remember to save the file periodically to avoid lost work.</strong><br/>
+	
+	<h3>Examples and Special Cases</h3>
+	In addition to the annotation scheme, there are few other things to keep in mind. The same word can be of different types depending on the sentence, document and genre. Here are some examples that might appear commonly -<br/>
+	
+	<ol>
+		<li>He went to school in <font color="blue">Washington</font> . - Washington would be I-LOC and everything else O.</li><br/>
+		<li>He went to school at <font color="blue">University of Washington</font> . - "University of Washington" will be I-ORG I-ORG I-ORG.</li><br/>
+		<li><font color="blue">Washington</font> officials made a decision - Washington would be I-LOC</li><br/>
+		<li><font color="blue">Washington</font> ran for a mile . - Washington would be I-PER</li><br/>
+		<li>In case there is no sentence, only a name, look if there are other names in the document and decide what pattern it is. eg. If we have just "Washington" and other cities are listed, then it is a LOC but it other person names are listed, then it is a PER. If nothing else is mentioned, use the most common type or use 'ERROR'.</li><br/>
+		<li>"White House" and "Kremlin" can be LOC or ORG depending on the sentence. If "a picture was taken at White House" or "renovations were done at the Kremlin", then these are LOC but if "White House officials took a decision" then it is an ORG.</li><br/>
+		<li>"Bush administration" would be "I-PER O" since it is a general name but "Bill and Melinda Gates Foundation" would be ORG. Same applies for examples such as "Bush campaign".</li><br/>
+		<li>"Police Department" is O but "Manchester Police Department" is ORG. Similarly "Legislature" is O but "Oregon Legislature" or "Oregon's Legislature" is ORG.</li><br/>
+		<li>Senate and House are ORG even though they look like general names since they are used in the context of U.S.</li><br/>
+		<li>For LOC, mark the full location name designating part of the area. eg. central London, southern Philadelphia, midtown Manhattan, downtown Chicago, West Germany.</li><br/>
+		<li>Even location names such as Atlantic, Pacific should be marked as LOC. So should oceans, seas, mountains, planets.</li><br/>
+		<li>Earth is LOC when used as the planet name but O if earth refers to the groud or soil.</li><br/>
+		<li>Abstract places such as paradise, hell, heaven are NOT LOC but are O.</li><br/>
+		<li>Street addresses are named locations. eg. 111 ABC Street NY - 110079, 30th Precinct, Seventh Avenue, 28th and Broad</li><br/>
+		<li>Restaurants and hotels are generally locations unless they are referring to a whole group or chain. eg. A specific "McDonald's" is a location but otherwise it an ORG.</li><br/>
+		<li>"Metropolitan Opera House" would a LOC but "XYZ Opera" may be a company or a group so it would be ORG.</li><br/>
+		<li>Musuems such as MOMA and MET are ORG</li><br/>
+		<li>Generally, sports teams are named based on the city they are from but they are ORG. This is where the genre will help a lot. City names in sports genres are generally sports team and hence ORGS. Be careful as there still may be city names in Sports that are not sports team. eg. "The match was played in Seattle" - Seattle is a LOC. Similarly, "Allan Houston" and "Michael Jordan" are two examples of people who last names are also city names.</li><br/>
+		<li>Classifieds generally begin with the last name of the person who died. eg. SMITH - John E. Mark everything as I-PER except the '-'. Mark the hyphen as O.</li><br/>
+		<li>Remember to mark short forms such as NYC, U.S., F.B.I., I.N.S.</li><br/>
+		<li>Lastly, remember to read the full sentence. "House" could refer to the TV show and would be O but if the sentence talks about the character "House" in the show, then it would be PER. Similarly, "O.C" could be the TV show (marked as O) or the location. Another example is "Hamlet" - it could be the play (marked as O) or the character (marked as PER).</li><br/>
+	</ol>
+	
+</body>
+
+</html>
